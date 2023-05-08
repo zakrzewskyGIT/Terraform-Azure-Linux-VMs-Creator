@@ -88,7 +88,7 @@ resource "azurerm_virtual_machine" "linuxvm00" {
   resource_group_name = azurerm_resource_group.rg00.name
   network_interface_ids = [element(azurerm_network_interface.nic00.*.id, count.index)]
 
-  vm_size = var.vm_size # "Standard_B2s"
+  vm_size = var.vm_size
   delete_data_disks_on_termination = true
 
   storage_image_reference {
@@ -98,7 +98,6 @@ resource "azurerm_virtual_machine" "linuxvm00" {
     version   = var.image_version
   }
   storage_os_disk {
-    #name = "myosdisk-${count.index}"
     name = "${var.resource_prefix}-${format("%02d", count.index)}-os"
     caching = "ReadWrite"
     create_option = "FromImage"
@@ -126,7 +125,7 @@ resource "azurerm_virtual_machine" "linuxvm00" {
     inline = [
       #"sudo apt-get update",
       #"sudo apt-get install -y htop",
-      "echo 'hello world' > /home/${var.vm_username}/hello",
+      #"echo 'hello world' > /home/${var.vm_username}/hello",
       "echo ${var.public_key} >> /home/${var.vm_username}/.ssh/authorized_keys"
     ]
   }
